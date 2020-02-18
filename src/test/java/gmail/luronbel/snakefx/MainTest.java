@@ -2,7 +2,7 @@ package gmail.luronbel.snakefx;
 
 import org.junit.Test;
 
-public class ApplicationTest {
+public class MainTest {
 
     @Test
     public void contextLoads() {
