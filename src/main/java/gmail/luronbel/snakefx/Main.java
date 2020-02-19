@@ -10,13 +10,13 @@ import static gmail.luronbel.snakefx.configuration.Core.CORE_BEAN;
 
 public class Main extends Application {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ContextConfig.class);
+    public void start(final Stage primaryStage) {
+        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ContextConfig.class);
         context.getBean(CORE_BEAN, Core.class).start(primaryStage);
     }
 }

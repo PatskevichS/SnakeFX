@@ -14,15 +14,27 @@ import static gmail.luronbel.snakefx.configuration.ContextConfig.MAIN_SCENE;
 public class Core {
     public static final String CORE_BEAN = "core";
 
-    @Value("${window_caption}")
-    private String windowCaption;
+    @Value("${app_name}")
+    private String appName;
+
+    @Value("${app_version}")
+    private String appVersion;
+
+    @Value("${window_height}")
+    private int windowHeight;
+
+    @Value("${window_width}")
+    private int windowWidth;
 
     @Autowired
     @Qualifier(MAIN_SCENE)
     private Scene mainScene;
 
     public void start(@NonNull final Stage primaryStage) {
-        primaryStage.setTitle(windowCaption);
+        primaryStage.setTitle(appName + " " + appVersion);
+        primaryStage.setMaxWidth(windowWidth);
+        primaryStage.setMaxHeight(windowHeight + 28);
+        primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.show();
     }
