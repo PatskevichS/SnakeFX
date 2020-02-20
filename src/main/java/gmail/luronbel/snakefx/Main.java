@@ -1,12 +1,12 @@
 package gmail.luronbel.snakefx;
 
+import gmail.luronbel.snakefx.components.Core;
 import gmail.luronbel.snakefx.configuration.ContextConfig;
-import gmail.luronbel.snakefx.configuration.Core;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import static gmail.luronbel.snakefx.configuration.Core.CORE_BEAN;
+import static gmail.luronbel.snakefx.components.Core.CORE_BEAN;
 
 public class Main extends Application {
 
