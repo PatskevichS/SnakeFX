@@ -1,9 +1,9 @@
-package gmail.luronbel.snakefx.components;
+package gmail.luronbel.snakefx.layout;
 
 import javafx.scene.Group;
 import org.springframework.stereotype.Component;
 
-@Component(GameElements.GAME_ELEMENTS_BEAN)
-public class GameElements extends Group {
+@Component(GameElementsGroup.GAME_ELEMENTS_BEAN)
+public class GameElementsGroup extends Group {
     public static final String GAME_ELEMENTS_BEAN = "gameElements";
 }

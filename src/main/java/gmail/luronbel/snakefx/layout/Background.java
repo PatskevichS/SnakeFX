@@ -1,4 +1,4 @@
-package gmail.luronbel.snakefx.components;
+package gmail.luronbel.snakefx.layout;
 
 import javafx.scene.image.ImageView;
 import org.springframework.beans.factory.annotation.Autowired;

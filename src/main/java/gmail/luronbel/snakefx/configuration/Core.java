@@ -1,5 +1,8 @@
-package gmail.luronbel.snakefx.components;
+package gmail.luronbel.snakefx.configuration;
 
+import gmail.luronbel.snakefx.components.Game;
+import gmail.luronbel.snakefx.layout.GameElementsGroup;
+import gmail.luronbel.snakefx.layout.GameFieldLayout;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -9,9 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import static gmail.luronbel.snakefx.components.Game.GAME_BEAN;
-import static gmail.luronbel.snakefx.components.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 import static gmail.luronbel.snakefx.configuration.Direction.*;
+import static gmail.luronbel.snakefx.layout.GameElementsGroup.GAME_ELEMENTS_BEAN;
+import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 
 @Component(Core.CORE_BEAN)
 public class Core {
@@ -29,30 +32,33 @@ public class Core {
     @Value("${window_width}")
     private int windowWidth;
 
-    @Autowired
-    @Qualifier(GAME_BEAN)
-    private Game game;
+    private Game currentGame;
 
     @Autowired
     @Qualifier(GAME_FIELD_LAYOUT_BEAN)
     private GameFieldLayout gameFieldLayout;
 
+    @Autowired
+    @Qualifier(GAME_ELEMENTS_BEAN)
+    private GameElementsGroup gameElementsGroup;
+
     public void start(@NonNull final Stage primaryStage) {
+        currentGame = new Game(gameElementsGroup, false);
         final Scene mainScene = new Scene(gameFieldLayout, windowWidth, windowHeight);
         mainScene.setOnKeyPressed(event -> {
             final KeyCode k = event.getCode();
             switch (k) {
                 case D:
-                    game.setDirection(RIGHT);
+                    currentGame.setDirection(RIGHT);
                     break;
                 case A:
-                    game.setDirection(LEFT);
+                    currentGame.setDirection(LEFT);
                     break;
                 case S:
-                    game.setDirection(BOTTOM);
+                    currentGame.setDirection(BOTTOM);
                     break;
                 case W:
-                    game.setDirection(TOP);
+                    currentGame.setDirection(TOP);
                     break;
             }
         });
@@ -62,8 +68,8 @@ public class Core {
         primaryStage.setMaxHeight(windowHeight + 28);
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
-        primaryStage.setOnCloseRequest(event -> game.stop());
+        primaryStage.setOnCloseRequest(event -> currentGame.stop());
         primaryStage.show();
-        game.start();
+        currentGame.start();
     }
 }
