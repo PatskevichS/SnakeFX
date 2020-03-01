@@ -1,28 +1,45 @@
 package gmail.luronbel.snakefx.components;
 
-import gmail.luronbel.snakefx.configuration.Direction;
-import gmail.luronbel.snakefx.layout.GameElementsGroup;
+import gmail.luronbel.snakefx.components.utils.Driver;
+import gmail.luronbel.snakefx.components.view.Generator;
+import gmail.luronbel.snakefx.components.view.apple.SimpleApple;
+import gmail.luronbel.snakefx.components.view.snake.SnakeViewFactory;
+import gmail.luronbel.snakefx.configuration.CoreData;
 import org.springframework.lang.NonNull;
+
+import java.util.Arrays;
 
 public class Game {
     private boolean isDone = false;
-    private final boolean isPaused = false;
-    private final GameField gameField;
+    private boolean isPaused = false;
     private final Snake snake;
+    private final SimpleApple apple;
+    private final CoreData coreData;
 
-    public Game(@NonNull final GameElementsGroup gameElementsGroup, final boolean withWalls) {
-        gameField = new GameField(withWalls);
-        snake = new Snake(gameElementsGroup, gameField);
+    public Game(@NonNull final CoreData coreData, @NonNull final SnakeViewFactory snakeViewFactory,
+                final Generator... generators) {
+        this.coreData = coreData;
+        coreData.reset();
+
+        final GameField gameField = new GameField();
+        snake = new Snake(coreData, gameField, snakeViewFactory);
+        apple = new SimpleApple(coreData, gameField);
+
+        Arrays.stream(generators).forEach(generator -> generator.generate(coreData, gameField));
     }
 
     public void start() {
-        snake.init();
-
+        apple.show();
         final Thread game = new Thread(() -> {
-            while (!isDone && !isPaused) {
+            while (!isDone) {
                 try {
-                    snake.move();
-                    Thread.sleep(200);
+                    if (!isPaused) {
+                        if (snake.move()) {
+                            coreData.addPoints(13);
+                            apple.show();
+                        }
+                    }
+                    Thread.sleep(100);
                 } catch (final RuntimeException ex) {
                     System.out.println("Snake crashed");
                     stop();
@@ -42,7 +59,17 @@ public class Game {
         isDone = true;
     }
 
-    public void setDirection(@NonNull final Direction direction) {
-        snake.setDirection(direction);
+    public void pause() {
+        isPaused = true;
+    }
+
+    public void resume() {
+        isPaused = false;
+    }
+
+    public void setDirection(@NonNull final Driver.Direction direction) {
+        if (!isPaused) {
+            snake.setDirection(direction);
+        }
     }
 }

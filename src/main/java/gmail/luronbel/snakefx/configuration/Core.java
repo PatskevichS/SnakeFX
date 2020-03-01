@@ -1,8 +1,21 @@
 package gmail.luronbel.snakefx.configuration;
 
+import static gmail.luronbel.snakefx.components.utils.Driver.Direction.BOTTOM;
+import static gmail.luronbel.snakefx.components.utils.Driver.Direction.LEFT;
+import static gmail.luronbel.snakefx.components.utils.Driver.Direction.RIGHT;
+import static gmail.luronbel.snakefx.components.utils.Driver.Direction.TOP;
+import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
+import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
+import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
+
 import gmail.luronbel.snakefx.components.Game;
-import gmail.luronbel.snakefx.layout.GameElementsGroup;
+import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacle;
+import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacleGenerator;
+import gmail.luronbel.snakefx.components.view.snake.SimpleSnakeViewFactory;
+import gmail.luronbel.snakefx.components.view.wall.SimpleWall;
+import gmail.luronbel.snakefx.components.view.wall.SimpleWallGenerator;
 import gmail.luronbel.snakefx.layout.GameFieldLayout;
+import gmail.luronbel.snakefx.layout.MainMenu;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -11,10 +24,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-
-import static gmail.luronbel.snakefx.configuration.Direction.*;
-import static gmail.luronbel.snakefx.layout.GameElementsGroup.GAME_ELEMENTS_BEAN;
-import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 
 @Component(Core.CORE_BEAN)
 public class Core {
@@ -39,11 +48,14 @@ public class Core {
     private GameFieldLayout gameFieldLayout;
 
     @Autowired
-    @Qualifier(GAME_ELEMENTS_BEAN)
-    private GameElementsGroup gameElementsGroup;
+    @Qualifier(CORE_DATA_BEAN)
+    private CoreData coreData;
+
+    @Autowired
+    @Qualifier(MAIN_MENU_BEAN)
+    private MainMenu mainMenu;
 
     public void start(@NonNull final Stage primaryStage) {
-        currentGame = new Game(gameElementsGroup, false);
         final Scene mainScene = new Scene(gameFieldLayout, windowWidth, windowHeight);
         mainScene.setOnKeyPressed(event -> {
             final KeyCode k = event.getCode();
@@ -60,6 +72,17 @@ public class Core {
                 case W:
                     currentGame.setDirection(TOP);
                     break;
+                case ESCAPE:
+                    if (gameFieldLayout.isModalViewShown()) {
+                        gameFieldLayout.hideModalView();
+                        currentGame.resume();
+                        mainMenu.hide();
+                    } else {
+                        currentGame.pause();
+                        gameFieldLayout.showModalView();
+                        mainMenu.show(currentGame != null);
+                    }
+                    break;
             }
         });
 
@@ -68,8 +91,32 @@ public class Core {
         primaryStage.setMaxHeight(windowHeight + 28);
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
-        primaryStage.setOnCloseRequest(event -> currentGame.stop());
+        primaryStage.setOnCloseRequest(event -> stopCurrentGame());
         primaryStage.show();
-        currentGame.start();
+        mainMenu.setExitButtonAction(event -> {
+            stopCurrentGame();
+            primaryStage.close();
+        });
+        mainMenu.setNewGameButtonAction(event -> {
+            stopCurrentGame();
+            currentGame = new Game(coreData, new SimpleSnakeViewFactory(), new SimpleWallGenerator(new SimpleWall()),
+                    new SimpleObstacleGenerator(new SimpleObstacle()));
+            mainMenu.hide();
+            gameFieldLayout.hideModalView();
+            currentGame.start();
+        });
+        mainMenu.setResumeButtonAction(event -> {
+            mainMenu.hide();
+            gameFieldLayout.hideModalView();
+            currentGame.resume();
+        });
+        gameFieldLayout.showModalView();
+        mainMenu.show(currentGame != null);
+    }
+
+    private void stopCurrentGame() {
+        if (currentGame != null) {
+            currentGame.stop();
+        }
     }
 }
