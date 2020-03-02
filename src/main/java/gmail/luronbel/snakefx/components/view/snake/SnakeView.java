@@ -16,4 +16,6 @@ public interface SnakeView {
     int getX();
 
     void show();
+
+    void hide();
 }

@@ -53,7 +53,7 @@ public class CoreData {
         gameElementsGroup.getChildren().addAll(obstacles);
         obstaclesIterator = obstacles.iterator();
 
-        for (int i = 1; i <= (X_COUNT * 2 + Y_COUNT * 2); i++) {
+        for (int i = 1; i <= (X_COUNT * 2 + Y_COUNT * 2 + 4); i++) {
             final ImageView wall = new ImageView();
             wall.setVisible(false);
             walls.add(wall);
@@ -82,6 +82,8 @@ public class CoreData {
 
         snakeSegments.iterator().forEachRemaining(e -> e.setVisible(false));
         snakeSegmentsIterator = snakeSegments.iterator();
+
+        pointsCounter.reset();
     }
 
     public Sphere getApple() {

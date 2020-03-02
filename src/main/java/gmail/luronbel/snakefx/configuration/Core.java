@@ -7,15 +7,17 @@ import static gmail.luronbel.snakefx.components.utils.Driver.Direction.TOP;
 import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
+import static gmail.luronbel.snakefx.layout.TimeWindow.TIME_WINDOW_BEAN;
 
 import gmail.luronbel.snakefx.components.Game;
 import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacle;
 import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacleGenerator;
 import gmail.luronbel.snakefx.components.view.snake.SimpleSnakeViewFactory;
+import gmail.luronbel.snakefx.components.view.wall.Random;
 import gmail.luronbel.snakefx.components.view.wall.SimpleWall;
-import gmail.luronbel.snakefx.components.view.wall.SimpleWallGenerator;
 import gmail.luronbel.snakefx.layout.GameFieldLayout;
 import gmail.luronbel.snakefx.layout.MainMenu;
+import gmail.luronbel.snakefx.layout.TimeWindow;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -55,6 +57,13 @@ public class Core {
     @Qualifier(MAIN_MENU_BEAN)
     private MainMenu mainMenu;
 
+    @Autowired
+    @Qualifier(TIME_WINDOW_BEAN)
+    private TimeWindow timeWindow;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     public void start(@NonNull final Stage primaryStage) {
         final Scene mainScene = new Scene(gameFieldLayout, windowWidth, windowHeight);
         mainScene.setOnKeyPressed(event -> {
@@ -73,17 +82,29 @@ public class Core {
                     currentGame.setDirection(TOP);
                     break;
                 case ESCAPE:
-                    if (gameFieldLayout.isModalViewShown()) {
-                        gameFieldLayout.hideModalView();
-                        currentGame.resume();
-                        mainMenu.hide();
-                    } else {
-                        currentGame.pause();
-                        gameFieldLayout.showModalView();
-                        mainMenu.show(currentGame != null);
-                    }
+                    pauseGame();
                     break;
             }
+        });
+
+        gameFieldLayout.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+
+        });
+        gameFieldLayout.setOnMouseReleased(event -> {
+            if (!mainMenu.isShown() && !timeWindow.isShown()) {
+                resumeCurrentGame();
+                gameFieldLayout.hideModalView();
+            }
+        });
+        gameFieldLayout.setOnMouseDragged(event -> {
+            if (!gameFieldLayout.isModalViewShown() && !timeWindow.isShown()) {
+                pauseCurrentGame();
+                gameFieldLayout.showModalView();
+            }
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
         });
 
         primaryStage.setTitle(appName + " " + appVersion);
@@ -92,20 +113,28 @@ public class Core {
         primaryStage.setResizable(false);
         primaryStage.setScene(mainScene);
         primaryStage.setOnCloseRequest(event -> stopCurrentGame());
+        primaryStage.iconifiedProperty().addListener((ov, t, t1) -> {
+            if (t1) {
+                pauseGame();
+            }
+        });
         primaryStage.show();
-        mainMenu.setExitButtonAction(event -> {
+        mainMenu.setExitButtonAction(event ->
+        {
             stopCurrentGame();
             primaryStage.close();
         });
-        mainMenu.setNewGameButtonAction(event -> {
+        mainMenu.setNewGameButtonAction(event ->
+        {
             stopCurrentGame();
-            currentGame = new Game(coreData, new SimpleSnakeViewFactory(), new SimpleWallGenerator(new SimpleWall()),
+            currentGame = new Game(coreData, new SimpleSnakeViewFactory(), new Random(new SimpleWall()),
                     new SimpleObstacleGenerator(new SimpleObstacle()));
             mainMenu.hide();
             gameFieldLayout.hideModalView();
             currentGame.start();
         });
-        mainMenu.setResumeButtonAction(event -> {
+        mainMenu.setResumeButtonAction(event ->
+        {
             mainMenu.hide();
             gameFieldLayout.hideModalView();
             currentGame.resume();
@@ -114,9 +143,39 @@ public class Core {
         mainMenu.show(currentGame != null);
     }
 
+    private void pauseGame() {
+        if (currentGame != null) {
+            if (gameFieldLayout.isModalViewShown()) {
+                gameFieldLayout.hideModalView();
+                resumeCurrentGame();
+                mainMenu.hide();
+            } else {
+                pauseCurrentGame();
+                gameFieldLayout.showModalView();
+                mainMenu.show(currentGame != null);
+            }
+        }
+    }
+
     private void stopCurrentGame() {
         if (currentGame != null) {
             currentGame.stop();
+            coreData.reset();
+            System.out.println("Game is stopped");
+        }
+    }
+
+    private void pauseCurrentGame() {
+        if (currentGame != null) {
+            currentGame.pause();
+            System.out.println("Game is paused");
+        }
+    }
+
+    private void resumeCurrentGame() {
+        if (currentGame != null) {
+            currentGame.resume();
+            System.out.println("Game is resumed");
         }
     }
 }

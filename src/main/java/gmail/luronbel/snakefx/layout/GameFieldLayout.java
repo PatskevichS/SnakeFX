@@ -5,6 +5,7 @@ import static gmail.luronbel.snakefx.layout.Background.BACKGROUND_BEAN;
 import static gmail.luronbel.snakefx.layout.GameElementsGroup.GAME_ELEMENTS_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
 import static gmail.luronbel.snakefx.layout.MenuBar.MEU_BAR_BEAN;
+import static gmail.luronbel.snakefx.layout.TimeWindow.TIME_WINDOW_BEAN;
 
 import gmail.luronbel.snakefx.components.Grid;
 import javafx.scene.effect.GaussianBlur;
@@ -30,17 +31,17 @@ public class GameFieldLayout extends Pane {
     public static final int Y_COUNT = (BOTTOM_Y - CELL) / CELL;
 
     private final Rectangle modalView;
-    private final GameElementsGroup gameElementsGroup;
+    private final Pane interactiveViews;
 
     @Autowired
     public GameFieldLayout(@Qualifier(GAME_ELEMENTS_BEAN) final GameElementsGroup gameElementsGroup,
                            @Qualifier(MEU_BAR_BEAN) final MenuBar menuBar,
                            @Qualifier(GRID_BEAN) final Grid grid, @Qualifier(BACKGROUND_BEAN) final Background background,
                            @Qualifier(MAIN_MENU_BEAN) final MainMenu mainMenu,
+                           @Qualifier(TIME_WINDOW_BEAN) final TimeWindow timeWindow,
                            @Value("${window_height}") final int windowHeight, @Value("${window_width}") final int windowWidth) {
         super();
-        this.gameElementsGroup = gameElementsGroup;
-        final Pane interactiveViews = new Pane();
+        interactiveViews = new Pane();
         interactiveViews.getChildren().add(gameElementsGroup);
         interactiveViews.getChildren().add(grid);
         interactiveViews.getChildren().add(menuBar);
@@ -57,12 +58,12 @@ public class GameFieldLayout extends Pane {
 
     public void showModalView() {
         modalView.setVisible(true);
-        gameElementsGroup.setEffect(new GaussianBlur());
+        interactiveViews.setEffect(new GaussianBlur());
     }
 
     public void hideModalView() {
         modalView.setVisible(false);
-        gameElementsGroup.setEffect(null);
+        interactiveViews.setEffect(null);
     }
 
     public boolean isModalViewShown() {

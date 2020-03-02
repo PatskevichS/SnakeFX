@@ -142,14 +142,18 @@ public class MainMenu extends VBox {
 
     public void show(final boolean isGameCreated) {
         if (!isGameCreated) {
-            resumeButton.setVisible(false);
+            resumeButton.setDisable(true);
         } else {
-            resumeButton.setVisible(true);
+            resumeButton.setDisable(false);
         }
         setVisible(true);
     }
 
     public void hide() {
         setVisible(false);
+    }
+
+    public boolean isShown() {
+        return isVisible();
     }
 }

@@ -30,12 +30,13 @@ public class Snake extends AbstractComponent {
         this.factory = factory;
         driver = new Driver(gameField);
         init();
+        hide();
     }
 
-    private void init() {
-        createSegment(6, 10);
-        createSegment(6, 11);
-        createSegment(6, 12);
+    public void init() {
+        createSegment(12, 14);
+        createSegment(13, 14);
+        createSegment(14, 14);
     }
 
     public boolean move() throws CrashException {
@@ -94,5 +95,13 @@ public class Snake extends AbstractComponent {
 
     public void setDirection(@NonNull final Driver.Direction direction) {
         driver.setDirection(direction);
+    }
+
+    public void hide() {
+        snake.forEach(segment -> segment.hide());
+    }
+
+    public void show() {
+        snake.forEach(segment -> segment.show());
     }
 }

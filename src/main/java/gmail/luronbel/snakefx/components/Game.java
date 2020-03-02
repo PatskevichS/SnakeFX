@@ -16,10 +16,11 @@ public class Game {
     private final SimpleApple apple;
     private final CoreData coreData;
 
+    private int stepsBetweenApple = 0;
+
     public Game(@NonNull final CoreData coreData, @NonNull final SnakeViewFactory snakeViewFactory,
                 final Generator... generators) {
         this.coreData = coreData;
-        coreData.reset();
 
         final GameField gameField = new GameField();
         snake = new Snake(coreData, gameField, snakeViewFactory);
@@ -29,14 +30,19 @@ public class Game {
     }
 
     public void start() {
+        snake.show();
         apple.show();
         final Thread game = new Thread(() -> {
             while (!isDone) {
                 try {
                     if (!isPaused) {
                         if (snake.move()) {
-                            coreData.addPoints(13);
+                            final int points = 15 - ((int) (stepsBetweenApple * 0.2));
+                            coreData.addPoints(points < 0 ? 5 : points);
                             apple.show();
+                            stepsBetweenApple = 0;
+                        } else {
+                            stepsBetweenApple++;
                         }
                     }
                     Thread.sleep(100);

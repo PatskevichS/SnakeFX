@@ -58,4 +58,9 @@ public class SimpleSnakeView implements SnakeView {
     public void show() {
         view.setVisible(true);
     }
+
+    @Override
+    public void hide() {
+        view.setVisible(false);
+    }
 }

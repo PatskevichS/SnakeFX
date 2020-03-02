@@ -69,4 +69,9 @@ public class PointsCounter extends Text {
         points += pointsToAdd;
         setText(String.format(TEMPLATE, points));
     }
+
+    public void reset() {
+        points = 0;
+        setText(String.format(TEMPLATE, points));
+    }
 }
