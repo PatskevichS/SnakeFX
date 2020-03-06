@@ -1,12 +1,11 @@
-package gmail.luronbel.snakefx.components.view.wall;
+package gmail.luronbel.snakefx.components.view.wall.impl;
 
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.X_COUNT;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.Y_COUNT;
 
 import gmail.luronbel.snakefx.components.GameField;
-import gmail.luronbel.snakefx.components.view.Generator;
+import gmail.luronbel.snakefx.components.view.wall.AbstractWallGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
-import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 
 /**
@@ -14,10 +13,7 @@ import org.springframework.lang.NonNull;
  *
  * @author Stas_Patskevich
  */
-@AllArgsConstructor
-public class Bunker implements Generator {
-
-    protected final WallView view;
+public class Bunker extends AbstractWallGenerator {
 
     @Override
     public void generate(@NonNull final CoreData coreData, @NonNull final GameField gameField) {

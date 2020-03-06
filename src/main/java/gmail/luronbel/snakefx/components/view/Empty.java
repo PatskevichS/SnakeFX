@@ -1,21 +1,25 @@
-package gmail.luronbel.snakefx.components.view.wall;
+package gmail.luronbel.snakefx.components.view;
 
 import gmail.luronbel.snakefx.components.GameField;
-import gmail.luronbel.snakefx.components.view.Generator;
+import gmail.luronbel.snakefx.components.view.wall.WallView;
 import gmail.luronbel.snakefx.configuration.CoreData;
 import org.springframework.lang.NonNull;
 
 /**
- * Free.
+ * Empty.
  *
  * @author Stas_Patskevich
  */
-public class Free implements Generator {
+public class Empty implements Generator {
 
-    public Free(final WallView view) {
+    public Empty(final WallView view) {
     }
 
     @Override
     public void generate(@NonNull final CoreData coreData, @NonNull final GameField gameField) {
+    }
+
+    @Override
+    public void setView(final View view) {
     }
 }

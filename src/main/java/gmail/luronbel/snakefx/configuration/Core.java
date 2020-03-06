@@ -5,19 +5,18 @@ import static gmail.luronbel.snakefx.components.utils.Driver.Direction.LEFT;
 import static gmail.luronbel.snakefx.components.utils.Driver.Direction.RIGHT;
 import static gmail.luronbel.snakefx.components.utils.Driver.Direction.TOP;
 import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
+import static gmail.luronbel.snakefx.configuration.GameEngine.GAME_ENGINE_BEAN;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
-import static gmail.luronbel.snakefx.layout.TimeWindow.TIME_WINDOW_BEAN;
 
-import gmail.luronbel.snakefx.components.Game;
+import gmail.luronbel.snakefx.components.view.apple.SimpleApple;
 import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacle;
-import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacleGenerator;
+import gmail.luronbel.snakefx.components.view.obstacle.impl.Shelve;
 import gmail.luronbel.snakefx.components.view.snake.SimpleSnakeViewFactory;
-import gmail.luronbel.snakefx.components.view.wall.Random;
-import gmail.luronbel.snakefx.components.view.wall.SimpleWall;
+import gmail.luronbel.snakefx.components.view.wall.impl.Checkers;
+import gmail.luronbel.snakefx.components.view.wall.impl.SimpleWall;
 import gmail.luronbel.snakefx.layout.GameFieldLayout;
 import gmail.luronbel.snakefx.layout.MainMenu;
-import gmail.luronbel.snakefx.layout.TimeWindow;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -43,8 +42,6 @@ public class Core {
     @Value("${window_width}")
     private int windowWidth;
 
-    private Game currentGame;
-
     @Autowired
     @Qualifier(GAME_FIELD_LAYOUT_BEAN)
     private GameFieldLayout gameFieldLayout;
@@ -58,28 +55,35 @@ public class Core {
     private MainMenu mainMenu;
 
     @Autowired
-    @Qualifier(TIME_WINDOW_BEAN)
-    private TimeWindow timeWindow;
+    @Qualifier(GAME_ENGINE_BEAN)
+    private GameEngine gameEngine;
 
     private double xOffset = 0;
     private double yOffset = 0;
 
     public void start(@NonNull final Stage primaryStage) {
+        gameEngine.setObstacleGenerator(new Shelve());
+        gameEngine.setObstacleView(new SimpleObstacle());
+        gameEngine.setWallGenerator(new Checkers());
+        gameEngine.setWallView(new SimpleWall());
+        gameEngine.setSnakeViewFactory(new SimpleSnakeViewFactory());
+        gameEngine.setAppleView(new SimpleApple());
+
         final Scene mainScene = new Scene(gameFieldLayout, windowWidth, windowHeight);
         mainScene.setOnKeyPressed(event -> {
             final KeyCode k = event.getCode();
             switch (k) {
                 case D:
-                    currentGame.setDirection(RIGHT);
+                    gameEngine.changeDirection(RIGHT);
                     break;
                 case A:
-                    currentGame.setDirection(LEFT);
+                    gameEngine.changeDirection(LEFT);
                     break;
                 case S:
-                    currentGame.setDirection(BOTTOM);
+                    gameEngine.changeDirection(BOTTOM);
                     break;
                 case W:
-                    currentGame.setDirection(TOP);
+                    gameEngine.changeDirection(TOP);
                     break;
                 case ESCAPE:
                     pauseGame();
@@ -93,13 +97,13 @@ public class Core {
 
         });
         gameFieldLayout.setOnMouseReleased(event -> {
-            if (!mainMenu.isShown() && !timeWindow.isShown()) {
+            if (!mainMenu.isShown()) {
                 resumeCurrentGame();
                 gameFieldLayout.hideModalView();
             }
         });
         gameFieldLayout.setOnMouseDragged(event -> {
-            if (!gameFieldLayout.isModalViewShown() && !timeWindow.isShown()) {
+            if (!gameFieldLayout.isModalViewShown()) {
                 pauseCurrentGame();
                 gameFieldLayout.showModalView();
             }
@@ -126,25 +130,22 @@ public class Core {
         });
         mainMenu.setNewGameButtonAction(event ->
         {
-            stopCurrentGame();
-            currentGame = new Game(coreData, new SimpleSnakeViewFactory(), new Random(new SimpleWall()),
-                    new SimpleObstacleGenerator(new SimpleObstacle()));
             mainMenu.hide();
             gameFieldLayout.hideModalView();
-            currentGame.start();
+            gameEngine.start();
         });
         mainMenu.setResumeButtonAction(event ->
         {
             mainMenu.hide();
             gameFieldLayout.hideModalView();
-            currentGame.resume();
+            gameEngine.resume();
         });
         gameFieldLayout.showModalView();
-        mainMenu.show(currentGame != null);
+        mainMenu.show(gameEngine.isInitialized());
     }
 
     private void pauseGame() {
-        if (currentGame != null) {
+        if (gameEngine.isInitialized()) {
             if (gameFieldLayout.isModalViewShown()) {
                 gameFieldLayout.hideModalView();
                 resumeCurrentGame();
@@ -152,30 +153,20 @@ public class Core {
             } else {
                 pauseCurrentGame();
                 gameFieldLayout.showModalView();
-                mainMenu.show(currentGame != null);
+                mainMenu.show(gameEngine.isInitialized());
             }
         }
     }
 
     private void stopCurrentGame() {
-        if (currentGame != null) {
-            currentGame.stop();
-            coreData.reset();
-            System.out.println("Game is stopped");
-        }
+        gameEngine.stop();
     }
 
     private void pauseCurrentGame() {
-        if (currentGame != null) {
-            currentGame.pause();
-            System.out.println("Game is paused");
-        }
+        gameEngine.pause();
     }
 
     private void resumeCurrentGame() {
-        if (currentGame != null) {
-            currentGame.resume();
-            System.out.println("Game is resumed");
-        }
+        gameEngine.resume();
     }
 }

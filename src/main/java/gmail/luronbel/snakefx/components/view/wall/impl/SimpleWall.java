@@ -1,4 +1,6 @@
-package gmail.luronbel.snakefx.components.view.wall;
+package gmail.luronbel.snakefx.components.view.wall.impl;
+
+import gmail.luronbel.snakefx.components.view.wall.AbstractWall;
 
 /**
  * SimpleWall.

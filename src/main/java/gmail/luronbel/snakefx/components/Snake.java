@@ -5,19 +5,13 @@ import gmail.luronbel.snakefx.components.view.snake.SnakeView;
 import gmail.luronbel.snakefx.components.view.snake.SnakeViewFactory;
 import gmail.luronbel.snakefx.configuration.CoreData;
 import gmail.luronbel.snakefx.exceptions.CrashException;
-import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 
-public class Snake extends AbstractComponent {
-
-    @AllArgsConstructor
-    private static class Segment {
-        protected int y;
-        protected int x;
-        protected SnakeView view;
-    }
+public class Snake {
+    protected final CoreData coreData;
+    protected final GameField gameField;
 
     private final Driver driver;
     private final SnakeViewFactory factory;
@@ -26,17 +20,18 @@ public class Snake extends AbstractComponent {
 
     public Snake(@NonNull final CoreData coreData, @NonNull final GameField gameField,
                  @NonNull final SnakeViewFactory factory) {
-        super(coreData, gameField);
         this.factory = factory;
+        this.coreData = coreData;
+        this.gameField = gameField;
         driver = new Driver(gameField);
         init();
         hide();
     }
 
     public void init() {
-        createSegment(12, 14);
-        createSegment(13, 14);
-        createSegment(14, 14);
+        createSegment(14, 26);
+        createSegment(14, 27);
+        createSegment(14, 28);
     }
 
     public boolean move() throws CrashException {

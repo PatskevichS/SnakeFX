@@ -21,7 +21,7 @@ public class Driver {
         TOP, BOTTOM, LEFT, RIGHT
     }
 
-    private Direction direction = TOP;
+    private Direction direction = LEFT;
     private boolean canChangeDirection = true;
     private final GameField gameField;
 

@@ -1,12 +1,11 @@
-package gmail.luronbel.snakefx.components.view.wall;
+package gmail.luronbel.snakefx.components.view.wall.impl;
 
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.X_COUNT;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.Y_COUNT;
 
 import gmail.luronbel.snakefx.components.GameField;
-import gmail.luronbel.snakefx.components.view.Generator;
+import gmail.luronbel.snakefx.components.view.wall.AbstractWallGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
-import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -18,23 +17,23 @@ import java.util.List;
  *
  * @author Stas_Patskevich
  */
-@AllArgsConstructor
-public class Random implements Generator {
+public class Random extends AbstractWallGenerator {
     private static final int RANDOM_Y_COUNT = 6;
     private static final int RANDOM_X_COUNT = 16;
 
-    protected final WallView view;
-
-
     @Override
     public void generate(@NonNull final CoreData coreData, @NonNull final GameField gameField) {
+        if (RANDOM_Y_COUNT >= Y_COUNT - 2 || RANDOM_X_COUNT >= X_COUNT - 2) {
+            throw new RuntimeException("Initialization error");
+        }
+
         final List<Integer> randomY = new ArrayList<>();
         final List<Integer> randomX = new ArrayList<>();
 
-        for (int y = 1; y <= Y_COUNT; y++) {
+        for (int y = 2; y <= Y_COUNT - 1; y++) {
             randomY.add(y);
         }
-        for (int x = 1; x <= X_COUNT; x++) {
+        for (int x = 2; x <= X_COUNT - 1; x++) {
             randomX.add(x);
         }
         Collections.shuffle(randomY);

@@ -66,7 +66,7 @@ public class GameField {
 
     public void createObstacle(final int y, final int x) {
         if (map[y][x].element != EMPTY) {
-            throw new RuntimeException("Error during creating obstacle segment");
+            throw new RuntimeException("Error during creating obstacle segment {" + y + "," + x + "}");
         } else {
             map[y][x].element = OBSTACLE;
             catchPosition(y, x);

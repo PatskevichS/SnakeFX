@@ -2,31 +2,28 @@ package gmail.luronbel.snakefx.components;
 
 import gmail.luronbel.snakefx.components.utils.Driver;
 import gmail.luronbel.snakefx.components.view.Generator;
-import gmail.luronbel.snakefx.components.view.apple.SimpleApple;
-import gmail.luronbel.snakefx.components.view.snake.SnakeViewFactory;
+import gmail.luronbel.snakefx.components.view.apple.AppleView;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import lombok.Getter;
 import org.springframework.lang.NonNull;
-
-import java.util.Arrays;
 
 public class Game {
     private boolean isDone = false;
     private boolean isPaused = false;
     private final Snake snake;
-    private final SimpleApple apple;
+    private final AppleView apple;
     private final CoreData coreData;
+    @Getter
+    private final long id;
 
     private int stepsBetweenApple = 0;
 
-    public Game(@NonNull final CoreData coreData, @NonNull final SnakeViewFactory snakeViewFactory,
+    public Game(@NonNull final CoreData coreData, final Snake snake, final AppleView apple,
                 final Generator... generators) {
         this.coreData = coreData;
-
-        final GameField gameField = new GameField();
-        snake = new Snake(coreData, gameField, snakeViewFactory);
-        apple = new SimpleApple(coreData, gameField);
-
-        Arrays.stream(generators).forEach(generator -> generator.generate(coreData, gameField));
+        this.snake = snake;
+        this.apple = apple;
+        id = System.currentTimeMillis();
     }
 
     public void start() {
@@ -77,5 +74,9 @@ public class Game {
         if (!isPaused) {
             snake.setDirection(direction);
         }
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 }

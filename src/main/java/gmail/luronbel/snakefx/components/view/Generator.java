@@ -10,4 +10,6 @@ import gmail.luronbel.snakefx.configuration.CoreData;
  */
 public interface Generator {
     void generate(CoreData coreData, GameField gameField);
+
+    void setView(View view);
 }
