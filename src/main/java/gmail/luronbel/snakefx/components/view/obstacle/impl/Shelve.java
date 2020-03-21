@@ -6,12 +6,14 @@ import static gmail.luronbel.snakefx.layout.GameFieldLayout.Y_COUNT;
 import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.obstacle.AbstractObstacleGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import org.springframework.stereotype.Component;
 
 /**
  * Shelve.
  *
  * @author Stas_Patskevich
  */
+@Component
 public class Shelve extends AbstractObstacleGenerator {
     public static final int LENGTH = 4;
 

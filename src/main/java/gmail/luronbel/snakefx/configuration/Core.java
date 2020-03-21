@@ -8,15 +8,11 @@ import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
 import static gmail.luronbel.snakefx.configuration.GameEngine.GAME_ENGINE_BEAN;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
+import static gmail.luronbel.snakefx.layout.Settings.GAME_CONFIGURATION_BEAN;
 
-import gmail.luronbel.snakefx.components.view.apple.SimpleApple;
-import gmail.luronbel.snakefx.components.view.obstacle.SimpleObstacle;
-import gmail.luronbel.snakefx.components.view.obstacle.impl.Shelve;
-import gmail.luronbel.snakefx.components.view.snake.SimpleSnakeViewFactory;
-import gmail.luronbel.snakefx.components.view.wall.impl.Checkers;
-import gmail.luronbel.snakefx.components.view.wall.impl.SimpleWall;
 import gmail.luronbel.snakefx.layout.GameFieldLayout;
 import gmail.luronbel.snakefx.layout.MainMenu;
+import gmail.luronbel.snakefx.layout.Settings;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -57,18 +53,14 @@ public class Core {
     @Autowired
     @Qualifier(GAME_ENGINE_BEAN)
     private GameEngine gameEngine;
+    @Autowired
+    @Qualifier(GAME_CONFIGURATION_BEAN)
+    private Settings settings;
 
     private double xOffset = 0;
     private double yOffset = 0;
 
     public void start(@NonNull final Stage primaryStage) {
-        gameEngine.setObstacleGenerator(new Shelve());
-        gameEngine.setObstacleView(new SimpleObstacle());
-        gameEngine.setWallGenerator(new Checkers());
-        gameEngine.setWallView(new SimpleWall());
-        gameEngine.setSnakeViewFactory(new SimpleSnakeViewFactory());
-        gameEngine.setAppleView(new SimpleApple());
-
         final Scene mainScene = new Scene(gameFieldLayout, windowWidth, windowHeight);
         mainScene.setOnKeyPressed(event -> {
             final KeyCode k = event.getCode();
@@ -97,7 +89,7 @@ public class Core {
 
         });
         gameFieldLayout.setOnMouseReleased(event -> {
-            if (!mainMenu.isShown()) {
+            if (!mainMenu.isShown() && !settings.isShown()) {
                 resumeCurrentGame();
                 gameFieldLayout.hideModalView();
             }
@@ -109,6 +101,10 @@ public class Core {
             }
             primaryStage.setX(event.getScreenX() - xOffset);
             primaryStage.setY(event.getScreenY() - yOffset);
+        });
+        settings.setBackButtonAction(event -> {
+            settings.hide();
+            mainMenu.show(gameEngine.isInitialized());
         });
 
         primaryStage.setTitle(appName + " " + appVersion);
@@ -127,6 +123,11 @@ public class Core {
         {
             stopCurrentGame();
             primaryStage.close();
+        });
+        mainMenu.setSettingsButtonAction(event ->
+        {
+            mainMenu.hide();
+            settings.show();
         });
         mainMenu.setNewGameButtonAction(event ->
         {

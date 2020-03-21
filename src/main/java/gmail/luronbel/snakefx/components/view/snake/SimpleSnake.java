@@ -1,16 +1,18 @@
 package gmail.luronbel.snakefx.components.view.snake;
 
 import javafx.scene.shape.Sphere;
+import org.springframework.stereotype.Component;
 
 /**
  * SimpleSnakeViewFactory.
  *
  * @author Stas_Patskevich
  */
-public class SimpleSnakeViewFactory implements SnakeViewFactory {
+@Component
+public class SimpleSnake implements SnakeViewFactory {
 
     @Override
     public SnakeView wrap(final Sphere view) {
-        return new SimpleSnakeView(view);
+        return new SimpleSnakeViewElement(view);
     }
 }

@@ -7,6 +7,7 @@ import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.wall.AbstractWallGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,8 @@ import java.util.List;
  *
  * @author Stas_Patskevich
  */
-public class Random extends AbstractWallGenerator {
+@Component
+public class RandomWalls extends AbstractWallGenerator {
     private static final int RANDOM_Y_COUNT = 6;
     private static final int RANDOM_X_COUNT = 16;
 

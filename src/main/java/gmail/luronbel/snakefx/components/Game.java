@@ -15,15 +15,17 @@ public class Game {
     private final CoreData coreData;
     @Getter
     private final long id;
+    private final int speed;
 
     private int stepsBetweenApple = 0;
 
-    public Game(@NonNull final CoreData coreData, final Snake snake, final AppleView apple,
+    public Game(@NonNull final CoreData coreData, final Snake snake, final AppleView apple, final int speed,
                 final Generator... generators) {
         this.coreData = coreData;
         this.snake = snake;
         this.apple = apple;
-        id = System.currentTimeMillis();
+        this.speed = speed;
+        id = System.currentTimeMillis() % 1000000;
     }
 
     public void start() {
@@ -42,7 +44,7 @@ public class Game {
                             stepsBetweenApple++;
                         }
                     }
-                    Thread.sleep(100);
+                    Thread.sleep(speed);
                 } catch (final RuntimeException ex) {
                     System.out.println("Snake crashed");
                     stop();

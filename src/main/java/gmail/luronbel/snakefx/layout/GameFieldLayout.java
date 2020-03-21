@@ -5,7 +5,7 @@ import static gmail.luronbel.snakefx.layout.Background.BACKGROUND_BEAN;
 import static gmail.luronbel.snakefx.layout.GameElementsGroup.GAME_ELEMENTS_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
 import static gmail.luronbel.snakefx.layout.MenuBar.MEU_BAR_BEAN;
-import static gmail.luronbel.snakefx.layout.TimeWindow.TIME_WINDOW_BEAN;
+import static gmail.luronbel.snakefx.layout.Settings.GAME_CONFIGURATION_BEAN;
 
 import gmail.luronbel.snakefx.components.Grid;
 import javafx.scene.effect.GaussianBlur;
@@ -38,7 +38,7 @@ public class GameFieldLayout extends Pane {
                            @Qualifier(MEU_BAR_BEAN) final MenuBar menuBar,
                            @Qualifier(GRID_BEAN) final Grid grid, @Qualifier(BACKGROUND_BEAN) final Background background,
                            @Qualifier(MAIN_MENU_BEAN) final MainMenu mainMenu,
-                           @Qualifier(TIME_WINDOW_BEAN) final TimeWindow timeWindow,
+                           @Qualifier(GAME_CONFIGURATION_BEAN) final Settings settings,
                            @Value("${window_height}") final int windowHeight, @Value("${window_width}") final int windowWidth) {
         super();
         interactiveViews = new Pane();
@@ -54,6 +54,7 @@ public class GameFieldLayout extends Pane {
         getChildren().add(interactiveViews);
         getChildren().add(modalView);
         getChildren().add(mainMenu);
+        getChildren().add(settings);
     }
 
     public void showModalView() {

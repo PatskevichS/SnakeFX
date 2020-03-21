@@ -30,6 +30,8 @@ public class GameEngine {
 
     private final CoreData coreData;
     private Game currentGame;
+    @Setter
+    private int speed;
 
     @Setter
     private SnakeViewFactory snakeViewFactory;
@@ -65,7 +67,7 @@ public class GameEngine {
 
         final Snake snake = new Snake(coreData, gameField, snakeViewFactory);
 
-        currentGame = new Game(coreData, snake, appleView, wallGenerator, obstacleGenerator);
+        currentGame = new Game(coreData, snake, appleView, speed, wallGenerator, obstacleGenerator);
         currentGame.start();
     }
 
@@ -104,6 +106,7 @@ public class GameEngine {
         Assert.notNull(obstacleView, () -> String.format(ERROR_PATTERN, "obstacle view is not initialized"));
         Assert.notNull(wallView, () -> String.format(ERROR_PATTERN, "wall view is not initialized"));
         Assert.notNull(appleView, () -> String.format(ERROR_PATTERN, "apple view is not initialized"));
+        Assert.isTrue(speed > 10, "speed is not initialized");
     }
 
     public boolean isInitialized() {

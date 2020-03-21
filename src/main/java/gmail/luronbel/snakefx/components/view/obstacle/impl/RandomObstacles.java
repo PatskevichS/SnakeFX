@@ -6,13 +6,15 @@ import static gmail.luronbel.snakefx.layout.GameFieldLayout.Y_COUNT;
 import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.obstacle.AbstractObstacleGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import org.springframework.stereotype.Component;
 
 /**
  * Random.
  *
  * @author Stas_Patskevich
  */
-public class Random extends AbstractObstacleGenerator {
+@Component
+public class RandomObstacles extends AbstractObstacleGenerator {
     private static final int RANDOM_COUNT = 20;
 
     @Override

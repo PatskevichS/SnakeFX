@@ -7,12 +7,14 @@ import static gmail.luronbel.snakefx.layout.GameFieldLayout.Y_COUNT;
 import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.obstacle.AbstractObstacleGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import org.springframework.stereotype.Component;
 
 /**
  * InnerCorners.
  *
  * @author Stas_Patskevich
  */
+@Component
 public class InnerCorners extends AbstractObstacleGenerator {
 
     @Override

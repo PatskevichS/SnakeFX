@@ -7,12 +7,14 @@ import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.wall.AbstractWallGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * Walls.
  *
  * @author Stas_Patskevich
  */
+@Component
 public class Walls extends AbstractWallGenerator {
 
     private static final int SCALE = 4;

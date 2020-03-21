@@ -3,12 +3,14 @@ package gmail.luronbel.snakefx.components.view.obstacle.impl;
 import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.obstacle.AbstractObstacleGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import org.springframework.stereotype.Component;
 
 /**
  * FullCorners.
  *
  * @author Stas_Patskevich
  */
+@Component
 public class FullCorners extends AbstractObstacleGenerator {
 
     @Override

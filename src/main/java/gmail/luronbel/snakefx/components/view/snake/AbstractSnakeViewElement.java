@@ -4,29 +4,20 @@ import static gmail.luronbel.snakefx.layout.GameFieldLayout.BORDER;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.CELL;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.RADIUS;
 
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.CullFace;
 import javafx.scene.shape.Sphere;
 
 /**
- * SimpleSnakeView.
+ * AbstractSnakeViewElement.
  *
  * @author Stas_Patskevich
  */
-public class SimpleSnakeView implements SnakeView {
+public abstract class AbstractSnakeViewElement implements SnakeView {
 
     private final Sphere view;
     private int y;
     private int x;
 
-    public SimpleSnakeView(final Sphere view) {
-        view.setVisible(false);
-        view.setRadius(RADIUS - 0.5);
-        view.setCullFace(CullFace.BACK);
-        final PhongMaterial material = new PhongMaterial();
-        material.setDiffuseColor(Color.AQUA);
-        view.setMaterial(material);
+    protected AbstractSnakeViewElement(final Sphere view) {
         this.view = view;
     }
 

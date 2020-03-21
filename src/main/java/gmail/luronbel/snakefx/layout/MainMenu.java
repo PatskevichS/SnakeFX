@@ -27,7 +27,6 @@ import org.springframework.stereotype.Component;
 public class MainMenu extends VBox {
     public static final String MAIN_MENU_BEAN = "mainMenu";
 
-
     private static final int PADDING = 25;
     private static final int SPACING = 10;
     private static final int BUTTON_HEIGHT = 30;
@@ -54,7 +53,7 @@ public class MainMenu extends VBox {
         final int menuWidth = BUTTON_WIDTH + (PADDING * 2);
         final double layoutX = (double) (windowWidth - menuWidth) / 2;
 
-        final int menuHeight = (BUTTON_HEIGHT * 5) + (PADDING * 2) + (SPACING * 6) + NAME_FONT_SIZE + VERSION_FONT_SIZE;
+        final int menuHeight = (BUTTON_HEIGHT * 5) + (PADDING * 2) + (SPACING * 8) + NAME_FONT_SIZE + VERSION_FONT_SIZE;
         final double layoutY = (double) (windowHeight - menuHeight) / 2;
 
         setLayoutY(layoutY);
@@ -127,6 +126,10 @@ public class MainMenu extends VBox {
         hide();
     }
 
+
+    public void setSettingsButtonAction(final EventHandler<? super MouseEvent> action) {
+        settingsButton.setOnMouseClicked(action);
+    }
 
     public void setExitButtonAction(final EventHandler<? super MouseEvent> action) {
         exitButton.setOnMouseClicked(action);

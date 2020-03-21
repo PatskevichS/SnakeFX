@@ -7,12 +7,14 @@ import gmail.luronbel.snakefx.components.GameField;
 import gmail.luronbel.snakefx.components.view.wall.AbstractWallGenerator;
 import gmail.luronbel.snakefx.configuration.CoreData;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * Bunker.
  *
  * @author Stas_Patskevich
  */
+@Component
 public class Bunker extends AbstractWallGenerator {
 
     @Override
