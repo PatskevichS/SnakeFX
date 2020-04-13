@@ -4,6 +4,8 @@ import static gmail.luronbel.snakefx.layout.GameFieldLayout.BORDER;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.CELL;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.RADIUS;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
 /**
@@ -53,5 +55,12 @@ public abstract class AbstractSnakeViewElement implements SnakeView {
     @Override
     public void hide() {
         view.setVisible(false);
+    }
+
+    @Override
+    public void markAsBitten() {
+        final PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(Color.RED);
+        view.setMaterial(material);
     }
 }

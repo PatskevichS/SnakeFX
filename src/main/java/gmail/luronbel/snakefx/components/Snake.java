@@ -35,39 +35,43 @@ public class Snake {
     }
 
     public boolean move() throws CrashException {
-        driver.forbidChangingDirection();
-        final SnakeView head = snake.get(0);
-        final int headY = driver.resolveHeadY(head.getY(), head.getX());
-        final int headX = driver.resolveHeadX(head.getY(), head.getX());
-        final int yToAdd = tail.getY();
-        final int xToAdd = tail.getX();
-        boolean skip = true;
-        int previousY = head.getY();
-        int previousX = head.getX();
-        System.out.println("Move snake from {" + previousY + "," + previousX + "} to {" + headY + "," + headX + "}");
-        final boolean isAppleEaten = moveSnakeSegment(head, headY, headX);
-        gameField.catchPosition(headY, headX);
-        gameField.revealPosition(tail.getY(), tail.getX());
+        try {
+            driver.forbidChangingDirection();
+            final SnakeView head = snake.get(0);
+            final int headY = driver.resolveHeadY(head.getY(), head.getX());
+            final int headX = driver.resolveHeadX(head.getY(), head.getX());
+            final int yToAdd = tail.getY();
+            final int xToAdd = tail.getX();
+            boolean skip = true;
+            int previousY = head.getY();
+            int previousX = head.getX();
+            final boolean isAppleEaten = moveSnakeSegment(head, headY, headX);
+            gameField.catchPosition(headY, headX);
+            gameField.revealPosition(tail.getY(), tail.getX());
 
-        for (final SnakeView segment : snake) {
-            if (skip) {
-                skip = false;
-                continue;
+            for (final SnakeView segment : snake) {
+                if (skip) {
+                    skip = false;
+                    continue;
+                }
+                final int y = segment.getY();
+                final int x = segment.getX();
+                moveSnakeSegment(segment, previousY, previousX);
+                previousY = y;
+                previousX = x;
             }
-            final int y = segment.getY();
-            final int x = segment.getX();
-            moveSnakeSegment(segment, previousY, previousX);
-            previousY = y;
-            previousX = x;
-        }
 
-        if (isAppleEaten) {
-            System.out.println("Create new snake segment at {" + yToAdd + "," + xToAdd + "}");
-            createSegment(yToAdd, xToAdd);
-        }
+            if (isAppleEaten) {
+                createSegment(yToAdd, xToAdd);
+            }
 
-        driver.allowChangingDirection();
-        return isAppleEaten;
+            driver.allowChangingDirection();
+            return isAppleEaten;
+        } catch (final CrashException e) {
+            final SnakeView head = snake.get(0);
+            head.markAsBitten();
+            throw e;
+        }
     }
 
     public boolean moveSnakeSegment(final SnakeView toMove, final int toY, final int toX) throws CrashException {

@@ -4,6 +4,7 @@ import gmail.luronbel.snakefx.components.utils.Driver;
 import gmail.luronbel.snakefx.components.view.Generator;
 import gmail.luronbel.snakefx.components.view.apple.AppleView;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import gmail.luronbel.snakefx.layout.Timer;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
 
@@ -13,18 +14,20 @@ public class Game {
     private final Snake snake;
     private final AppleView apple;
     private final CoreData coreData;
+    private final Timer timer;
     @Getter
     private final long id;
     private final int speed;
 
     private int stepsBetweenApple = 0;
 
-    public Game(@NonNull final CoreData coreData, final Snake snake, final AppleView apple, final int speed,
-                final Generator... generators) {
+    public Game(@NonNull final CoreData coreData, @NonNull final Timer timer,
+                final Snake snake, final AppleView apple, final int speed, final Generator... generators) {
         this.coreData = coreData;
         this.snake = snake;
         this.apple = apple;
         this.speed = speed;
+        this.timer = timer;
         id = System.currentTimeMillis() % 1000000;
     }
 
@@ -45,22 +48,17 @@ public class Game {
                         }
                     }
                     Thread.sleep(speed);
-                } catch (final RuntimeException ex) {
-                    System.out.println("Snake crashed");
-                    stop();
-                    throw new RuntimeException(ex);
                 } catch (final Exception ex) {
-                    throw new RuntimeException(ex);
+                    timer.stop();
+                    return;
                 }
             }
         });
 
         game.start();
-        System.out.println("Game has been started");
     }
 
     public void stop() {
-        System.out.println("Game has been stopped");
         isDone = true;
     }
 

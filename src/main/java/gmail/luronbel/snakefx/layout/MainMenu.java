@@ -14,7 +14,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -32,28 +31,18 @@ public class MainMenu extends VBox {
     private static final int BUTTON_HEIGHT = 30;
     private static final int BUTTON_WIDTH = 160;
     private static final int FONT_SIZE = 16;
-    private static final int VERSION_FONT_SIZE = 10;
-    private static final int NAME_FONT_SIZE = 46;
     private static final String FONT_NAME = "times new roman";
-
-    private final String appName;
-    private final String appVersion;
 
     private final Button exitButton;
     private final Button newGameButton;
     private final Button resumeButton;
     private final Button settingsButton;
-    private final Button aboutButton;
 
-    public MainMenu(@Value("${app_name}") final String appName, @Value("${app_version}") final String appVersion,
-                    @Value("${window_width}") final int windowWidth, @Value("${window_height}") final int windowHeight) {
-        this.appName = appName;
-        this.appVersion = appVersion;
-
+    public MainMenu(@Value("${window_width}") final int windowWidth, @Value("${window_height}") final int windowHeight) {
         final int menuWidth = BUTTON_WIDTH + (PADDING * 2);
         final double layoutX = (double) (windowWidth - menuWidth) / 2;
 
-        final int menuHeight = (BUTTON_HEIGHT * 5) + (PADDING * 2) + (SPACING * 8) + NAME_FONT_SIZE + VERSION_FONT_SIZE;
+        final int menuHeight = (BUTTON_HEIGHT * 4) + (PADDING * 2) + (SPACING * 6);
         final double layoutY = (double) (windowHeight - menuHeight) / 2;
 
         setLayoutY(layoutY);
@@ -107,22 +96,7 @@ public class MainMenu extends VBox {
         settingsButton.setMinWidth(BUTTON_WIDTH);
         settingsButton.setEffect(dropShadow);
 
-        aboutButton = new Button("About");
-        aboutButton.setFont(font);
-        aboutButton.setShape(rectangle);
-        aboutButton.setMinHeight(BUTTON_HEIGHT);
-        aboutButton.setMinWidth(BUTTON_WIDTH);
-        aboutButton.setEffect(dropShadow);
-
-        final Text name = new Text(appName);
-        final Font nameFont = new Font("Odibee Sans", NAME_FONT_SIZE);
-        name.setFont(nameFont);
-        final Text version = new Text(appVersion);
-        final Font versionFont = new Font("Odibee Sans", VERSION_FONT_SIZE);
-        version.setFont(versionFont);
-        version.setOpacity(0.7);
-
-        getChildren().addAll(name, version, resumeButton, newGameButton, settingsButton, aboutButton, exitButton);
+        getChildren().addAll(resumeButton, newGameButton, settingsButton, exitButton);
         hide();
     }
 
@@ -144,11 +118,8 @@ public class MainMenu extends VBox {
     }
 
     public void show(final boolean isGameCreated) {
-        if (!isGameCreated) {
-            resumeButton.setDisable(true);
-        } else {
-            resumeButton.setDisable(false);
-        }
+        if (!isGameCreated) resumeButton.setDisable(true);
+        else resumeButton.setDisable(false);
         setVisible(true);
     }
 

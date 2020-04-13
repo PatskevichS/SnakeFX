@@ -31,43 +31,28 @@ public class GameField {
 
     public GameField() {
         spotFinder = new SpotFinder(this);
-        for (int y = 0; y <= Y_COUNT + 1; y++) {
-            for (int x = 0; x <= X_COUNT + 1; x++) {
-                map[y][x] = new Cell(EMPTY, x, y);
-            }
-        }
-        System.out.println("Game field has been created (" + Y_COUNT + "x" + X_COUNT + ")");
+        for (int y = 0; y <= Y_COUNT + 1; y++) for (int x = 0; x <= X_COUNT + 1; x++) map[y][x] = new Cell(EMPTY, x, y);
     }
 
     public void createSnakeSegment(final int y, final int x) {
-        if (map[y][x].element != EMPTY) {
-            throw new RuntimeException("Error during creating snake segment "
-                    + map[y][x].element + "{" + y + "," + x + "}");
-        } else {
-            map[y][x].element = SNAKE;
-        }
+        if (map[y][x].element != EMPTY) throw new RuntimeException("Error during creating snake segment "
+                + map[y][x].element + "{" + y + "," + x + "}");
+        else map[y][x].element = SNAKE;
     }
 
     public void createApple(final int y, final int x) {
-        if (map[y][x].element != EMPTY) {
-            throw new RuntimeException("Error during creating apple segment");
-        } else {
-            map[y][x].element = APPLE;
-        }
+        if (map[y][x].element != EMPTY) throw new RuntimeException("Error during creating apple segment");
+        else map[y][x].element = APPLE;
     }
 
     public void createWall(final int y, final int x) {
-        if (map[y][x].element != EMPTY) {
-            throw new RuntimeException("Error during creating wall segment");
-        } else {
-            map[y][x].element = WALL;
-        }
+        if (map[y][x].element != EMPTY) throw new RuntimeException("Error during creating wall segment");
+        else map[y][x].element = WALL;
     }
 
     public void createObstacle(final int y, final int x) {
-        if (map[y][x].element != EMPTY) {
-            throw new RuntimeException("Error during creating obstacle segment {" + y + "," + x + "}");
-        } else {
+        if (map[y][x].element != EMPTY) throw new RuntimeException("Error during creating obstacle segment {" + y + "," + x + "}");
+        else {
             map[y][x].element = OBSTACLE;
             catchPosition(y, x);
         }
@@ -75,11 +60,8 @@ public class GameField {
 
     public boolean moveSnakeSegment(final int fromY, final int fromX,
                                     final int toY, final int toX) throws CrashException {
-//        System.out.println("Move snake from {" + fromY + "," + fromX + "} to {" + toY + "," + toX + "}");
         final Cell move = map[fromY][fromX];
-        if (move.element != SNAKE) {
-            throw new RuntimeException("Error element segment state: " + move.element);
-        }
+        if (move.element != SNAKE) throw new RuntimeException("Error element segment state: " + move.element);
         if (map[toY][toX].element == EMPTY) {
             map[toY][toX].element = SNAKE;
             move.element = EMPTY;
@@ -88,10 +70,8 @@ public class GameField {
             map[toY][toX].element = SNAKE;
             move.element = EMPTY;
             return true;
-        } else {
-            throw new CrashException(map[toY][toX].element + ": from {" + fromY + "," + fromX + "}" +
-                    " to {" + toY + "," + toX + "}");
-        }
+        } else throw new CrashException(map[toY][toX].element + ": from {" + fromY + "," + fromX + "}" +
+                " to {" + toY + "," + toX + "}");
     }
 
     public Cell findPositionForElement() {

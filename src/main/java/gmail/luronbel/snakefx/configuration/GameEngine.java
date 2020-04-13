@@ -1,6 +1,7 @@
 package gmail.luronbel.snakefx.configuration;
 
 import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
+import static gmail.luronbel.snakefx.layout.Timer.TIMER_BEAN;
 
 import gmail.luronbel.snakefx.components.Game;
 import gmail.luronbel.snakefx.components.GameField;
@@ -11,6 +12,7 @@ import gmail.luronbel.snakefx.components.view.apple.AppleView;
 import gmail.luronbel.snakefx.components.view.obstacle.ObstacleView;
 import gmail.luronbel.snakefx.components.view.snake.SnakeViewFactory;
 import gmail.luronbel.snakefx.components.view.wall.WallView;
+import gmail.luronbel.snakefx.layout.Timer;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
@@ -29,6 +31,7 @@ public class GameEngine {
     private static final String INFO_PATTERN = "Game (%s): %s.";
 
     private final CoreData coreData;
+    private final Timer timer;
     private Game currentGame;
     @Setter
     private int speed;
@@ -46,11 +49,14 @@ public class GameEngine {
     @Setter
     private AppleView appleView;
 
-    public GameEngine(@Qualifier(CORE_DATA_BEAN) final CoreData coreData) {
+    public GameEngine(@Qualifier(CORE_DATA_BEAN) final CoreData coreData,
+                      @Qualifier(TIMER_BEAN) final Timer timer) {
         this.coreData = coreData;
+        this.timer = timer;
     }
 
     public void start() {
+        timer.reset();
         verify();
         coreData.reset();
         if (isInitialized() && !currentGame.isDone()) {
@@ -67,35 +73,34 @@ public class GameEngine {
 
         final Snake snake = new Snake(coreData, gameField, snakeViewFactory);
 
-        currentGame = new Game(coreData, snake, appleView, speed, wallGenerator, obstacleGenerator);
+        currentGame = new Game(coreData, timer, snake, appleView, speed, wallGenerator, obstacleGenerator);
         currentGame.start();
+        timer.start();
     }
 
     public void pause() {
         if (isInitialized()) {
             currentGame.pause();
-            System.out.println(String.format(INFO_PATTERN, currentGame.getId(), "stopped"));
+            timer.stop();
         }
     }
 
     public void resume() {
         if (isInitialized()) {
             currentGame.resume();
-            System.out.println(String.format(INFO_PATTERN, currentGame.getId(), "resumed"));
+            timer.start();
         }
     }
 
     public void stop() {
         if (isInitialized()) {
             currentGame.stop();
-            System.out.println(String.format(INFO_PATTERN, currentGame.getId(), "stopped"));
         }
     }
 
     public void changeDirection(@NonNull final Driver.Direction direction) {
         if (isInitialized()) {
             currentGame.setDirection(direction);
-            System.out.println(String.format(INFO_PATTERN, currentGame.getId(), "direction changed to " + direction));
         }
     }
 

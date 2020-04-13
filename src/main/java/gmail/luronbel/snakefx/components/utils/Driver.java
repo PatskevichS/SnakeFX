@@ -30,19 +30,11 @@ public class Driver {
     }
 
     public void setDirection(@NonNull final Direction direction) {
-        if (!canChangeDirection) {
-            return;
-        }
-        if (this.direction == TOP && direction == BOTTOM) {
-            return;
-        } else if (this.direction == BOTTOM && direction == TOP) {
-            return;
-        } else if (this.direction == LEFT && direction == Direction.RIGHT) {
-            return;
-        } else if (this.direction == Direction.RIGHT && direction == LEFT) {
-            return;
-        }
-        System.out.println("Direction changed to " + direction);
+        if (!canChangeDirection) return;
+        if (this.direction == TOP && direction == BOTTOM) return;
+        else if (this.direction == BOTTOM && direction == TOP) return;
+        else if (this.direction == LEFT && direction == Direction.RIGHT) return;
+        else if (this.direction == Direction.RIGHT && direction == LEFT) return;
         this.direction = direction;
         canChangeDirection = false;
     }
@@ -64,11 +56,8 @@ public class Driver {
                 y += 1;
                 break;
         }
-        if (y < 1 && gameField.getCellType(y, x) != WALL) {
-            y = Y_COUNT;
-        } else if (y > Y_COUNT && gameField.getCellType(y, x) != WALL) {
-            y = 1;
-        }
+        if (y < 1 && gameField.getCellType(y, x) != WALL) y = Y_COUNT;
+        else if (y > Y_COUNT && gameField.getCellType(y, x) != WALL) y = 1;
         return y;
     }
 
@@ -81,11 +70,8 @@ public class Driver {
                 x += 1;
                 break;
         }
-        if (x < 1 && gameField.getCellType(y, x) != WALL) {
-            x = X_COUNT;
-        } else if (x > X_COUNT && gameField.getCellType(y, x) != WALL) {
-            x = 1;
-        }
+        if (x < 1 && gameField.getCellType(y, x) != WALL) x = X_COUNT;
+        else if (x > X_COUNT && gameField.getCellType(y, x) != WALL) x = 1;
         return x;
     }
 

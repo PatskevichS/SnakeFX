@@ -18,4 +18,6 @@ public interface SnakeView {
     void show();
 
     void hide();
+
+    void markAsBitten();
 }

@@ -53,6 +53,7 @@ public class Core {
     @Autowired
     @Qualifier(GAME_ENGINE_BEAN)
     private GameEngine gameEngine;
+
     @Autowired
     @Qualifier(GAME_CONFIGURATION_BEAN)
     private Settings settings;
