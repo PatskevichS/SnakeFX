@@ -4,6 +4,7 @@ import gmail.luronbel.snakefx.components.utils.Driver;
 import gmail.luronbel.snakefx.components.view.Generator;
 import gmail.luronbel.snakefx.components.view.apple.AppleView;
 import gmail.luronbel.snakefx.configuration.CoreData;
+import gmail.luronbel.snakefx.layout.Notification;
 import gmail.luronbel.snakefx.layout.Timer;
 import lombok.Getter;
 import org.springframework.lang.NonNull;
@@ -15,19 +16,21 @@ public class Game {
     private final AppleView apple;
     private final CoreData coreData;
     private final Timer timer;
+    private final Notification notification;
     @Getter
     private final long id;
     private final int speed;
 
     private int stepsBetweenApple = 0;
 
-    public Game(@NonNull final CoreData coreData, @NonNull final Timer timer,
+    public Game(@NonNull final CoreData coreData, @NonNull final Timer timer, @NonNull final Notification notification,
                 final Snake snake, final AppleView apple, final int speed, final Generator... generators) {
         this.coreData = coreData;
         this.snake = snake;
         this.apple = apple;
         this.speed = speed;
         this.timer = timer;
+        this.notification = notification;
         id = System.currentTimeMillis() % 1000000;
     }
 
@@ -50,6 +53,7 @@ public class Game {
                     Thread.sleep(speed);
                 } catch (final Exception ex) {
                     timer.stop();
+                    notification.show();
                     return;
                 }
             }

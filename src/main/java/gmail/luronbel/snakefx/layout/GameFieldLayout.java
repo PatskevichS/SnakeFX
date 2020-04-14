@@ -5,6 +5,7 @@ import static gmail.luronbel.snakefx.layout.Background.BACKGROUND_BEAN;
 import static gmail.luronbel.snakefx.layout.GameElementsGroup.GAME_ELEMENTS_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
 import static gmail.luronbel.snakefx.layout.MenuBar.MEU_BAR_BEAN;
+import static gmail.luronbel.snakefx.layout.Notification.NOTIFICATION_BEAN;
 import static gmail.luronbel.snakefx.layout.Settings.GAME_CONFIGURATION_BEAN;
 
 import gmail.luronbel.snakefx.components.Grid;
@@ -39,12 +40,14 @@ public class GameFieldLayout extends Pane {
                            @Qualifier(GRID_BEAN) final Grid grid, @Qualifier(BACKGROUND_BEAN) final Background background,
                            @Qualifier(MAIN_MENU_BEAN) final MainMenu mainMenu,
                            @Qualifier(GAME_CONFIGURATION_BEAN) final Settings settings,
+                           @Qualifier(NOTIFICATION_BEAN) final Notification notification,
                            @Value("${window_height}") final int windowHeight, @Value("${window_width}") final int windowWidth) {
         super();
         interactiveViews = new Pane();
         interactiveViews.getChildren().add(gameElementsGroup);
         interactiveViews.getChildren().add(grid);
         interactiveViews.getChildren().add(menuBar);
+        interactiveViews.getChildren().add(notification);
 
         modalView = new Rectangle(windowWidth, windowHeight);
         modalView.setOpacity(0.7);

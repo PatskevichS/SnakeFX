@@ -24,10 +24,10 @@ public class MenuBar extends Group {
                    @Qualifier(TIMER_BEAN) final Timer timer) {
         getChildren().addAll(pointsCounter, timer);
 
-        pointsCounter.setY(BOTTOM_Y + CELL + 30);
+        pointsCounter.setY(BOTTOM_Y + CELL + 33);
         pointsCounter.setX(BORDER);
 
-        timer.setY(BOTTOM_Y + CELL + 30);
+        timer.setY(BOTTOM_Y + CELL + 33);
         timer.setX(RIGHT_X - CELL * 3);
     }
 

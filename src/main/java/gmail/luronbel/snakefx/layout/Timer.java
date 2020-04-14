@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +17,13 @@ import org.springframework.stereotype.Component;
 @Component(Timer.TIMER_BEAN)
 public class Timer extends Text {
     public static final String TIMER_BEAN = "timer";
-    private static final String TEMPLATE = "Timer: %s:%s";
+    private static final String TEMPLATE = "Time: %s:%s";
+    private static final String FONT_NAME = "times new roman";
+    @Getter
     private long min = 0;
+    @Getter
     private long sec = 0;
+    private long timerId = 0;
     private boolean running = false;
 
     public Timer() {
@@ -26,15 +31,17 @@ public class Timer extends Text {
         final DropShadow dropShadow = new DropShadow();
         innerShadow.setInput(dropShadow);
         setEffect(innerShadow);
-        setFont(Font.font(null, FontWeight.BOLD, 20));
+        setFont(Font.font(FONT_NAME, FontWeight.BOLD, 20));
         setFill(Color.WHITE);
         reset();
     }
 
     public void start() {
+        timerId++;
         running = true;
         new Thread(() -> {
-            while (running) {
+            final long id = timerId;
+            while (running && id == timerId) {
                 try {
                     Thread.sleep(1000);
                     updateTime();
@@ -56,6 +63,9 @@ public class Timer extends Text {
     }
 
     private void updateTime() {
+        if (!running) {
+            return;
+        }
         sec++;
         if (sec >= 60) {
             if (min <= 99) {

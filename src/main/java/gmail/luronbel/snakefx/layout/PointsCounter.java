@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Component;
 @Component(PointsCounter.POINTS_COUNTER_BEAN)
 public class PointsCounter extends Text {
     public static final String POINTS_COUNTER_BEAN = "pointsCounter";
+    private static final String FONT_NAME = "times new roman";
     private static final String TEMPLATE = "Points: %s";
+    @Getter
     private long points = 0;
 
     public PointsCounter() {
@@ -24,7 +27,7 @@ public class PointsCounter extends Text {
         final DropShadow dropShadow = new DropShadow();
         innerShadow.setInput(dropShadow);
         setEffect(innerShadow);
-        setFont(Font.font(null, FontWeight.BOLD, 20));
+        setFont(Font.font(FONT_NAME, FontWeight.BOLD, 20));
         setFill(Color.WHITE);
         addPoints(0);
     }

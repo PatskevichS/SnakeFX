@@ -8,10 +8,12 @@ import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
 import static gmail.luronbel.snakefx.configuration.GameEngine.GAME_ENGINE_BEAN;
 import static gmail.luronbel.snakefx.layout.GameFieldLayout.GAME_FIELD_LAYOUT_BEAN;
 import static gmail.luronbel.snakefx.layout.MainMenu.MAIN_MENU_BEAN;
+import static gmail.luronbel.snakefx.layout.Notification.NOTIFICATION_BEAN;
 import static gmail.luronbel.snakefx.layout.Settings.GAME_CONFIGURATION_BEAN;
 
 import gmail.luronbel.snakefx.layout.GameFieldLayout;
 import gmail.luronbel.snakefx.layout.MainMenu;
+import gmail.luronbel.snakefx.layout.Notification;
 import gmail.luronbel.snakefx.layout.Settings;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -53,6 +55,10 @@ public class Core {
     @Autowired
     @Qualifier(GAME_ENGINE_BEAN)
     private GameEngine gameEngine;
+
+    @Autowired
+    @Qualifier(NOTIFICATION_BEAN)
+    private Notification notification;
 
     @Autowired
     @Qualifier(GAME_CONFIGURATION_BEAN)
@@ -132,6 +138,7 @@ public class Core {
         });
         mainMenu.setNewGameButtonAction(event ->
         {
+            notification.hide();
             mainMenu.hide();
             gameFieldLayout.hideModalView();
             gameEngine.start();
@@ -152,6 +159,7 @@ public class Core {
                 gameFieldLayout.hideModalView();
                 resumeCurrentGame();
                 mainMenu.hide();
+                settings.hide();
             } else {
                 pauseCurrentGame();
                 gameFieldLayout.showModalView();

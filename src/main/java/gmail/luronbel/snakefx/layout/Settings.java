@@ -78,7 +78,7 @@ public class Settings extends VBox {
         final int menuWidth = BUTTON_WIDTH + (PADDING * 2);
         final double layoutX = (double) (windowWidth - menuWidth) / 2;
 
-        final int menuHeight = (BUTTON_HEIGHT * 4) + (FONT_SIZE * 4) + (PADDING * 2) + (SPACING * 10);
+        final int menuHeight = (BUTTON_HEIGHT * 4) + (FONT_SIZE * 4) + (PADDING * 2) + (SPACING * 11);
         final double layoutY = (double) (windowHeight - menuHeight) / 2;
 
         setLayoutY(layoutY);
@@ -101,16 +101,23 @@ public class Settings extends VBox {
         backButton.setEffect(dropShadow);
 
         setupComboBoxView("Wall generator", wallGenerators, value -> {
-            if (value.isPresent()) gameEngine.setWallGenerator(value.get());
-            else gameEngine.setWallGenerator(empty);
+            if (value.isPresent()) {
+                gameEngine.setWallGenerator(value.get());
+            } else {
+                gameEngine.setWallGenerator(empty);
+            }
         });
 
         setupComboBoxView("Obstacle generator", obstacleGenerators, value -> {
-            if (value.isPresent()) gameEngine.setObstacleGenerator(value.get());
-            else gameEngine.setObstacleGenerator(empty);
+            if (value.isPresent()) {
+                gameEngine.setObstacleGenerator(value.get());
+            } else {
+                gameEngine.setObstacleGenerator(empty);
+            }
         });
 
         final Text snakeViewCaption = new Text("Snake view");
+        snakeViewCaption.setEffect(new InnerShadow());
         snakeViewCaption.setFont(font);
         final ComboBox<String> snakeComboBox = new ComboBox<>();
         final List<String> itemsSnakes = snake.stream().map(bean -> bean.getClass().getSimpleName()).collect(Collectors.toList());
@@ -121,11 +128,15 @@ public class Settings extends VBox {
         snakeComboBox.setOnAction(event -> {
             final Optional<SnakeViewFactory> value = snake.stream()
                     .filter(e -> e.getClass().getSimpleName().equals(snakeComboBox.getValue())).findFirst();
-            if (value.isPresent()) gameEngine.setSnakeViewFactory(value.get());
-            else gameEngine.setSnakeViewFactory(defaultSnake);
+            if (value.isPresent()) {
+                gameEngine.setSnakeViewFactory(value.get());
+            } else {
+                gameEngine.setSnakeViewFactory(defaultSnake);
+            }
         });
 
         final Text gameSpeedCaption = new Text("Game speed");
+        gameSpeedCaption.setEffect(new InnerShadow());
         gameSpeedCaption.setFont(font);
         final Slider slider = new Slider(50, 150, 100);
         slider.setShowTickMarks(true);
@@ -150,6 +161,7 @@ public class Settings extends VBox {
                                                          final Consumer<Optional<T>> action) {
         final Text captionView = new Text(caption);
         captionView.setFont(font);
+        captionView.setEffect(new InnerShadow());
         final ComboBox<String> comboBoxView = new ComboBox<>();
         comboBoxView.minWidth(BUTTON_WIDTH);
         comboBoxView.maxWidth(BUTTON_WIDTH);

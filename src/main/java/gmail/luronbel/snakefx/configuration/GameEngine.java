@@ -1,6 +1,7 @@
 package gmail.luronbel.snakefx.configuration;
 
 import static gmail.luronbel.snakefx.configuration.CoreData.CORE_DATA_BEAN;
+import static gmail.luronbel.snakefx.layout.Notification.NOTIFICATION_BEAN;
 import static gmail.luronbel.snakefx.layout.Timer.TIMER_BEAN;
 
 import gmail.luronbel.snakefx.components.Game;
@@ -12,6 +13,7 @@ import gmail.luronbel.snakefx.components.view.apple.AppleView;
 import gmail.luronbel.snakefx.components.view.obstacle.ObstacleView;
 import gmail.luronbel.snakefx.components.view.snake.SnakeViewFactory;
 import gmail.luronbel.snakefx.components.view.wall.WallView;
+import gmail.luronbel.snakefx.layout.Notification;
 import gmail.luronbel.snakefx.layout.Timer;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +34,7 @@ public class GameEngine {
 
     private final CoreData coreData;
     private final Timer timer;
+    private final Notification notification;
     private Game currentGame;
     @Setter
     private int speed;
@@ -50,9 +53,11 @@ public class GameEngine {
     private AppleView appleView;
 
     public GameEngine(@Qualifier(CORE_DATA_BEAN) final CoreData coreData,
+                      @Qualifier(NOTIFICATION_BEAN) final Notification notification,
                       @Qualifier(TIMER_BEAN) final Timer timer) {
         this.coreData = coreData;
         this.timer = timer;
+        this.notification = notification;
     }
 
     public void start() {
@@ -73,7 +78,7 @@ public class GameEngine {
 
         final Snake snake = new Snake(coreData, gameField, snakeViewFactory);
 
-        currentGame = new Game(coreData, timer, snake, appleView, speed, wallGenerator, obstacleGenerator);
+        currentGame = new Game(coreData, timer, notification, snake, appleView, speed, wallGenerator, obstacleGenerator);
         currentGame.start();
         timer.start();
     }
@@ -95,6 +100,7 @@ public class GameEngine {
     public void stop() {
         if (isInitialized()) {
             currentGame.stop();
+            timer.stop();
         }
     }
 
