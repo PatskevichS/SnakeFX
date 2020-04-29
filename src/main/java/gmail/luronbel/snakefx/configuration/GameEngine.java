@@ -36,6 +36,7 @@ public class GameEngine {
     private final Timer timer;
     private final Notification notification;
     private Game currentGame;
+    private boolean gameStarted = false;
     @Setter
     private int speed;
 
@@ -60,7 +61,8 @@ public class GameEngine {
         this.notification = notification;
     }
 
-    public void start() {
+    public void init() {
+        gameStarted = false;
         timer.reset();
         verify();
         coreData.reset();
@@ -79,8 +81,13 @@ public class GameEngine {
         final Snake snake = new Snake(coreData, gameField, snakeViewFactory);
 
         currentGame = new Game(coreData, timer, notification, snake, appleView, speed, wallGenerator, obstacleGenerator);
+        currentGame.init();
+    }
+
+    public void start() {
         currentGame.start();
         timer.start();
+        gameStarted = true;
     }
 
     public void pause() {
@@ -105,6 +112,9 @@ public class GameEngine {
     }
 
     public void changeDirection(@NonNull final Driver.Direction direction) {
+        if (!gameStarted) {
+            start();
+        }
         if (isInitialized()) {
             currentGame.setDirection(direction);
         }

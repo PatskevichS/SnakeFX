@@ -141,7 +141,7 @@ public class Core {
             notification.hide();
             mainMenu.hide();
             gameFieldLayout.hideModalView();
-            gameEngine.start();
+            gameEngine.init();
         });
         mainMenu.setResumeButtonAction(event ->
         {

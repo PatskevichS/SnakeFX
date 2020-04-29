@@ -34,9 +34,12 @@ public class Game {
         id = System.currentTimeMillis() % 1000000;
     }
 
-    public void start() {
+    public void init() {
         snake.show();
         apple.show();
+    }
+
+    public void start() {
         final Thread game = new Thread(() -> {
             while (!isDone) {
                 try {
